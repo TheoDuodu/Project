@@ -11,27 +11,54 @@ resource "aws_vpc" "Project-VPC" {
   }
 }
 
-#creating a public subnet
+#creating a public subnet 1
 
-resource "aws_subnet" "Project-public-subnet" {
+resource "aws_subnet" "Project-public-subnet1" {
   vpc_id            = aws_vpc.Project-VPC.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "eu-west-2a"
 
   tags = {
-    Name = "Project-public-subnet"
+    Name = "Project-public-subnet1"
   }
 }
 
-#creating a private subnet
 
-resource "aws_subnet" "Project-private-subnet" {
+#creating a public subnet 2
+
+resource "aws_subnet" "Project-public-subnet2" {
   vpc_id            = aws_vpc.Project-VPC.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "eu-west-2a"
 
   tags = {
-    Name = "Project-private-subnet"
+    Name = "Project-public-subnet2"
+  }
+}
+
+
+#creating a private subnet1
+
+resource "aws_subnet" "Project-private-subnet1" {
+  vpc_id            = aws_vpc.Project-VPC.id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "eu-west-2a"
+
+  tags = {
+    Name = "Project-private-subnet1"
+  }
+}
+
+
+#creating a private subnet2
+
+resource "aws_subnet" "Project-private-subnet2" {
+  vpc_id            = aws_vpc.Project-VPC.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "eu-west-2a"
+
+  tags = {
+    Name = "Project-private-subnet2"
   }
 }
 
@@ -55,20 +82,32 @@ resource "aws_route_table" "Project-private-RT" {
   }
 }
 
-#Associating public subnet with public route table
+#Associating public subnet1 with public route table
 
-resource "aws_route_table_association" "Project-public-assoc" {
-  subnet_id      = aws_subnet.Project-public-subnet.id
+resource "aws_route_table_association" "Project-public-assoc1" {
+  subnet_id      = aws_subnet.Project-public-subnet1.id
   route_table_id = aws_route_table.Project-public-RT.id
 }
 
-#Associating private subnet with public route table
+#Associating public subnet2 with public route table
 
-resource "aws_route_table_association" "Project-private-assoc" {
-  subnet_id      = aws_subnet.Project-private-subnet.id
+resource "aws_route_table_association" "Project-public-assoc2" {
+  subnet_id      = aws_subnet.Project-public-subnet2.id
+  route_table_id = aws_route_table.Project-public-RT.id
+}
+#Associating private subnet1 with public route table
+
+resource "aws_route_table_association" "Project-private-assoc1" {
+  subnet_id      = aws_subnet.Project-private-subnet1.id
   route_table_id = aws_route_table.Project-private-RT.id
 }
 
+#Associating private subnet2 with public route table
+
+resource "aws_route_table_association" "Project-private-assoc2" {
+  subnet_id      = aws_subnet.Project-private-subnet2.id
+  route_table_id = aws_route_table.Project-private-RT.id
+}
 #Internet gateway
 
 resource "aws_internet_gateway" "Project-IGW" {
